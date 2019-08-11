@@ -1,7 +1,6 @@
 package com.spring.arvind.Spring5webapp.model;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -11,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 
 /**
  * Book
@@ -23,111 +23,95 @@ public class Book {
     private Long id;
     private String title;
     private String isbn;
-    private String publisher;
+
+    @OneToOne
+    private Publisher publisher;
 
     @ManyToMany
-    @JoinTable(name = "author_book", joinColumns = @JoinColumn(name = "book_id"), inverseJoinColumns = @JoinColumn(name = "author_id"))
+    @JoinTable(name = "author_book", joinColumns = @JoinColumn(name = "book_id"),
+    inverseJoinColumns = @JoinColumn(name = "author_id"))
     private Set<Author> authors = new HashSet<>();
 
     public Book() {
     }
 
-    public Book(String title, String isbn, String publisher) {
+    public Book(String title, String isbn, Publisher publisher) {
         this.title = title;
         this.isbn = isbn;
         this.publisher = publisher;
     }
 
-    public Book(String title, String isbn, String publisher, Set<Author> authors) {
+    public Book(String title, String isbn, Publisher publisher, Set<Author> authors) {
         this.title = title;
         this.isbn = isbn;
         this.publisher = publisher;
         this.authors = authors;
     }
 
-    /**
-     * @return the id
-     */
     public Long getId() {
         return id;
     }
 
-    /**
-     * @param title the title to set
-     */
-    public void setTitle(String title) {
-        this.title = title;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    /**
-     * @return the title
-     */
     public String getTitle() {
         return title;
     }
 
-    /**
-     * @param isbn the isbn to set
-     */
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    /**
-     * @return the isbn
-     */
     public String getIsbn() {
         return isbn;
     }
 
-    /**
-     * @param publisher the publisher to set
-     */
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 
-    /**
-     * @return the publisher
-     */
-    public String getPublisher() {
+    public Publisher getPublisher() {
         return publisher;
     }
 
-    /**
-     * @param authors the authors to set
-     */
-    public void setAuthors(Set<Author> authors) {
-        this.authors = authors;
+    public void setPublisher(Publisher publisher) {
+        this.publisher = publisher;
     }
 
-    /**
-     * @return the authors
-     */
     public Set<Author> getAuthors() {
         return authors;
     }
 
+    public void setAuthors(Set<Author> authors) {
+        this.authors = authors;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof Book)) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
         Book book = (Book) o;
-        return Objects.equals(id, book.id);
+
+        return id != null ? id.equals(book.id) : book.id == null;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return id != null ? id.hashCode() : 0;
     }
 
     @Override
     public String toString() {
-        return "{" + " id='" + getId() + "'" + ", title='" + getTitle() + "'" + ", isbn='" + getIsbn() + "'"
-                + ", publisher='" + getPublisher() + "'" + ", authors='" + getAuthors() + "'" + "}";
+        return "Book{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", isbn='" + isbn + '\'' +
+                ", publisher='" + publisher + '\'' +
+                ", authors=" + authors +
+                '}';
     }
 
 }
